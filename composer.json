@@ -17,7 +17,7 @@
         "php": "^7.2.0 || ^8.1.0",
         "ext-intl": "*",
         "ext-json": "*",
-        "glsgroup/sdk-api-parcel-processing": "^1.1.0",
+        "gls-m2-extension/sdk-api-parcel-processing": "^1.1.0",
         "magento/framework": "^102.0.0 || ^103.0.0",
         "magento/module-bundle": "^100.3.0 || ^101.0.0",
         "magento/module-catalog": "^103.0.0 || ^104.0.0",

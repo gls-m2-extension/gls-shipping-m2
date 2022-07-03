@@ -66,8 +66,7 @@ Support
 In case of questions or problems, please have a look at the
 [Support Portal (FAQ)](<"support portal url goes here">) first.
 
-If the issue cannot be resolved, you can contact the support team via the
-[Support Portal](<Support Portal Url goes here) or by sending an email
+If the issue cannot be resolved, you can contact the support team by sending an email
 to <gls.m2.extension@gmail.com>.
 
 License
