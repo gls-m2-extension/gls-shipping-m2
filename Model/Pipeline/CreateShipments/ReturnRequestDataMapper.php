@@ -110,7 +110,7 @@ class ReturnRequestDataMapper
         foreach ($requestExtractor->getPackages() as $package) {
             $weight = $package->getWeight();
             $weightUom = $package->getWeightUom();
-            $weightInKg = $this->unitConverter->convertWeight($weight, $weightUom, \Zend_Measure_Weight::KILOGRAM);
+            $weightInKg = $this->unitConverter->convertWeight($weight, $weightUom, 'KILOGRAM');
 
             $this->requestBuilder->addParcel(
                 $weightInKg,

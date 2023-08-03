@@ -38,7 +38,7 @@ class PostDataProviderDomestic
                     'productCode' => self::getProductCode($order),
                     'packagingWeight' => '0.33',
                     'weight' => '0',
-                    'weightUnit' => \Zend_Measure_Weight::KILOGRAM,
+                    'weightUnit' => 'KILOGRAM',
                 ]
             ]
         ];
@@ -75,7 +75,7 @@ class PostDataProviderDomestic
                     'productCode' => self::getProductCode($order),
                     'packagingWeight' => '0.33',
                     'weight' => '0',
-                    'weightUnit' => \Zend_Measure_Weight::KILOGRAM,
+                    'weightUnit' => 'KILOGRAM',
                 ]
             ]
         ];
@@ -132,7 +132,7 @@ class PostDataProviderDomestic
                 'productCode' => self::getProductCode($order),
                 'packagingWeight' => $packagingWeight,
                 'weight' => $orderItem->getWeight() * $orderItem->getQtyOrdered() + (float)$packagingWeight,
-                'weightUnit' => \Zend_Measure_Weight::KILOGRAM,
+                'weightUnit' => 'KILOGRAM',
             ];
 
             $packages[] = [
@@ -177,7 +177,7 @@ class PostDataProviderDomestic
                 'productCode' => self::getProductCode($order),
                 'packagingWeight' => $packagingWeight,
                 'weight' => $orderItem->getWeight() * $orderItem->getQtyOrdered() + (float)$packagingWeight,
-                'weightUnit' => \Zend_Measure_Weight::KILOGRAM,
+                'weightUnit' => 'KILOGRAM',
             ];
 
             $services = [

@@ -34,7 +34,7 @@ class PostDataProviderCrossBorder
                     'productCode' => self::getProductCode($order),
                     'packagingWeight' => '0.33',
                     'weight' => '0',
-                    'weightUnit' => \Zend_Measure_Weight::POUND,
+                    'weightUnit' => 'POUND',
                 ],
                 'packageCustoms' => [
                     'customsValue' => $order->getGrandTotal(),
@@ -94,7 +94,7 @@ class PostDataProviderCrossBorder
                 'productCode' => self::getProductCode($order),
                 'packagingWeight' => '0.33',
                 'weight' => $orderItem->getWeight() * $orderItem->getQtyOrdered(),
-                'weightUnit' => \Zend_Measure_Weight::POUND,
+                'weightUnit' => 'POUND',
             ];
 
             $packageCustoms = [
