@@ -1,0 +1,170 @@
+
+.action-show-popup.choose-pickup-location {
+    margin-top: 25px;
+}
+
+#popup-select-relaypoint {
+    display: none;
+}
+
+#popup-select-relaypoint .title {
+    margin-bottom: 5px;
+}
+
+#popup-select-relaypoint .point_relais_form_inputwrapper input {
+    margin-bottom: 10px;
+    background: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #c2c2c2;
+    border-radius: 1px;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    height: 32px;
+    line-height: 1.42857143;
+    padding: 0 9px;
+    vertical-align: baseline;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#popup-select-relaypoint .point_relais_form_inputwrapper .point_relais_form_search {
+    width: 100%;
+}
+
+#popup-select-relaypoint .point_relais_form_zipcode {
+    width: 20%;
+}
+
+#popup-select-relaypoint .relay_points_wrapper.isLoading .point_relais_liste, #popup-select-relaypoint .relay_points_wrapper.isLoading .relay_point_details {
+    visibility: hidden;
+}
+
+#popup-select-relaypoint .point_relais_liste {
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+#popup-select-relaypoint .point_relais_liste li .extra-data {
+    /*display: none;*/
+}
+
+#popup-select-relaypoint .point_relais_liste ul {
+    list-style-type: none;
+    font-size: 12px;
+    padding-left: 0;
+
+
+}
+
+#popup-select-relaypoint .point_relais_liste .point_relais_item {
+    display: flex;
+    flex-direction: column; /* Makes each box stack vertically */
+    align-items: center; /* Centers the boxes horizontally */
+    padding: 10px;
+    font-size: 14px;
+    position: relative;
+    /*height: 70px;*/
+    margin-bottom: 0;
+    border: solid 2px #c0c0c0;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    cursor: pointer;
+    border-radius: 1px;
+}
+.opening_hours li{
+    border: none !important;
+    margin-bottom: 5px;
+}
+
+#popup-select-relaypoint .point_relais_liste ul li.actif{
+    border-left: solid 2px midnightblue;
+}
+
+#popup-select-relaypoint .point_relais_liste ul li:last-child {
+    border-bottom: solid 2px #c0c0c0;
+}
+
+#popup-select-relaypoint .point_relais_liste ul li .counter {
+    background: #666 none repeat scroll 0 0;
+    border-radius: 50%;
+    color: #fff;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 3px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+}
+
+#popup-select-relaypoint .point_relais_liste ul li.actif .counter,
+#popup-select-relaypoint .point_relais_liste ul li:hover .counter {
+    background: #dc0032 none repeat scroll 0 0;
+}
+
+#popup-select-relaypoint .point_relais_liste ul li .point_relais_element {
+    width: 100%;
+}
+
+#popup-select-relaypoint .relay_point_details {
+    /*width: 53%;*/
+    /*float: left;*/
+    /*padding-left: 5px;*/
+    /*background-color: #f1f1f1;*/
+    /*min-height: 354px;*/
+    /*padding-top: 5px*/
+}
+
+#popup-select-relaypoint .relay_point_details .location {
+    min-height: 140px;
+    font-size: 14px;
+}
+
+#popup-select-relaypoint .relay_point_details .schedule{
+    border-top: lightgrey 1px solid;
+    padding-top: 7px;
+    margin-top: 7px;
+}
+
+#popup-select-relaypoint .relay_point_details .schedule .opening_hours {
+    font-size: 11px;
+}
+
+#popup-select-relaypoint .relay_point_details .schedule .day_name {
+    display: inline-block;
+    min-width: 55px;
+}
+
+#popup-select-relaypoint .relay_points_cart {
+    width: 50%;
+    float: left;
+}
+
+.select-pickup-location-btn{
+    margin: 10px;
+}
+
+
+.point_relais_element_head{
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px !important;
+    line-height: 30px !important;
+}
+
+.relay_point_details .additionalInfo{
+    font-size: 11px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: grey;
+}
+
+@media only screen and (max-width: 639px) {
+    .change-pickup-location {
+        width: 100%;
+    }
+}
+

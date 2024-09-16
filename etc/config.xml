@@ -16,6 +16,7 @@
                 <!-- Default elements -->
                 <active>0</active>
                 <title>GLS</title>
+                <parcelshop_title>GLS</parcelshop_title>
                 <sort_order>0</sort_order>
                 <showmethod>1</showmethod>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
@@ -36,6 +37,7 @@
                         }
                         ]]>
                     </cut_off_times>
+                    <allowed_methods>standard</allowed_methods>
                 </general>
                 <account>
                     <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
@@ -44,6 +46,9 @@
                 <checkout>
                     <method_title>Standard</method_title>
                 </checkout>
+                <checkout_parcelshop>
+                    <parcelshop_method_title>Parcelshop</parcelshop_method_title>
+                </checkout_parcelshop>
                 <shipment_defaults>
                     <label_size>A6</label_size>
                     <package_default_weight>0.1</package_default_weight>

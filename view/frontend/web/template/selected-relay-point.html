@@ -1,0 +1,40 @@
+<!-- ko if: relayPoint() === null && shippingMethod() && shippingMethod().method_code === 'parcelshop'-->
+
+<div class="step-title" data-role="title">
+    <span data-bind="i18n: 'Pick-up location'"></span>
+</div>
+<div>
+    <button class="action action-show-popup choose-pickup-location" data-bind="click: showPopup">
+        <span data-bind="i18n: 'Choose pick-up location'"></span>
+    </button>
+</div>
+
+
+<!-- /ko -->
+
+<!-- ko if: relayPoint() !== null && shippingMethod() && shippingMethod().method_code === 'parcelshop'-->
+
+<div class="step-title" data-role="title">
+    <span data-bind="i18n: 'Pick-up location'"></span>
+</div>
+
+<div class="shipping-address-item selected-item">
+    <div>
+        <span data-bind="text: relayPoint().name"></span>
+    </div>
+    <div>
+        <span data-bind="text: relayPoint().address"></span>
+    </div>
+
+    <div>
+        <span data-bind="text: relayPoint().zipcode"></span> <span data-bind="text: relayPoint().city"></span>
+    </div>
+</div>
+<div>
+        <button class="change-pickup-location" data-bind="click: showPopup">
+        <span data-bind="i18n: 'Change pick-up location'"></span>
+    </button>
+</div>
+
+
+<!-- /ko -->

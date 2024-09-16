@@ -12,15 +12,17 @@ define(
     ],
     function ($, utils, validationRules, $t) {
         'use strict';
-
+        console.log('validator XX')
         return {
             validationErrors: [],
 
             validate: function (address) {
+                console.log('XXvalidateXX')
                 var self = this;
 
                 this.validationErrors = [];
                 $.each(validationRules.getRules(), function (field, rule) {
+
                     if (rule.required && utils.isEmpty(address[field])) {
                         var message = $t('Field %1 is required.').replace('%1', field);
 
