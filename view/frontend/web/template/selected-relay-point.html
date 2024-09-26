@@ -20,7 +20,18 @@
 
 <div class="shipping-address-item selected-item">
     <div>
-        <span data-bind="text: relayPoint().name"></span>
+        <div class="point_relais_title">
+            <!-- ko if: relayPoint().type=='SHOPINSHOP' -->
+            <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_shop.png') }" />
+            <!-- /ko -->
+
+            <!-- ko if: relayPoint().type=='LOCKER' -->
+            <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_locker.png') }" />
+            <!-- /ko -->
+
+            <div class="point_relais_element_name" data-bind="text: relayPoint().name"></div>
+        </div>
+
     </div>
     <div>
         <span data-bind="text: relayPoint().address"></span>

@@ -154,6 +154,19 @@
     font-size: 15px !important;
     line-height: 30px !important;
 }
+.point_relais_title{
+    display: flex;
+    justify-content: start;
+}
+.point_relais_element_name{
+    margin-left: 8px;
+    max-width: 170px;
+    font-weight: bold;
+}
+
+.point_relais_logo{
+    max-height: 31px;
+}
 
 .relay_point_details .additionalInfo{
     font-size: 11px;

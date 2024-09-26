@@ -18,8 +18,20 @@
                     <!--                    <div class="counter" data-bind="text: $index()+1"></div>-->
                     <div class="point_relais_element">
                         <div>
+
                             <div class="point_relais_element_head">
-                                <div class="point_relais_element_name"><b data-bind="text: name"></b></div>
+                                <div class="point_relais_title">
+                                    <!-- ko if: type=='SHOPINSHOP' -->
+                                    <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_shop.png') }" />
+                                    <!-- /ko -->
+
+                                    <!-- ko if: type=='LOCKER' -->
+                                    <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_locker.png') }" />
+                                    <!-- /ko -->
+
+                                    <div class="point_relais_element_name"><b data-bind="text: name"></b></div>
+                                </div>
+
                                 <div class="point_relais_element_distance" data-bind="text: distance"></div>
                             </div>
                             <span data-bind="text: address"></span>

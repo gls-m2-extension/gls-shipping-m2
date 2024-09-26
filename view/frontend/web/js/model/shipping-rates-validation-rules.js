@@ -10,7 +10,6 @@ define(
 
         return {
             getRules: function () {
-                console.log('validation rules')
                 return {
                     'city': {
                         'required': false

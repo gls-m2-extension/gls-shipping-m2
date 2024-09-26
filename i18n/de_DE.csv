@@ -99,8 +99,8 @@ Returns,Retouren
 "You must also have Magento general logging enabled.","Das allgemeine Logging muss in Magento aktiviert sein, damit das GLS-spezifische Logging funktioniert."
 "ZIP/Postal Code",Postleitzahl
 https://www.gls-pakete.de/en/business-shipping/become-a-business-customer,https://www.gls-pakete.de/geschaeftlich-versenden/geschaeftskunde-werden
-"Pick-up location","Treffpunkt"
-"Change pick-up location","Änderungsort ändern"
+"Pick-up location","Abholpunkt"
+"Change pick-up location","Abholpunkt ändern"
 "Select pick-up location","Wählen Sie Abholort"
 "Choose pick-up location","Wählen Sie den Abholort"
 "Pick-up locations search","Pick up Standorte suchen"
@@ -121,6 +121,6 @@ https://www.gls-pakete.de/en/business-shipping/become-a-business-customer,https:
 "SUN","So"
 "We didn't find any pick-up location near your shipping address.","Wir haben keinen Abholort in der Nähe Ihrer Versandadresse gefunden."
 "Select a pick-up location","Bitte wählen Sie einen Abholort"
-"Address, postcode or city'",Adresse, Postleitzahl oder Stadt
+"Address, postcode or city","Adresse, Postleitzahl oder Stadt"
 "Search for nearby pick-up locations:","Suche nach Abholorten in der Nähe:"
 "Collect your parcels here","Holen Sie Ihre Pakete hier ab"

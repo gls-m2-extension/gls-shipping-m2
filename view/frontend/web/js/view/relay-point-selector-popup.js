@@ -15,9 +15,17 @@ define(['jquery', 'ko', 'mage/translate', 'uiComponent', 'Magento_Checkout/js/mo
             this.relayPoints = relayPointCollection.getItems();
             this.isLoading = relayPointCollection.isLoading;
             this.currentRelayPoint = currentRelayPoint;
+
+            this.relayPoints.subscribe((items)=>{
+                if(this.currentRelayPoint() === null && items.length > 0){
+                    currentRelayPoint(items[0]);
+                }
+            })
+            if(this.currentRelayPoint() === null && this.relayPoints.length > 0){
+                currentRelayPoint(this.relayPoints[0]);
+            }
             this.searchAddress = ko.observable(null);
             quote.shippingAddress.subscribe(function (address) {
-                console.log(address)
                 const postcode = address.postcode ?? '';
                 const city = address.city ?? ''
                 const street = (!address.street || !address.street[0] || address.street[0] === '') ? '' : address.street[0];

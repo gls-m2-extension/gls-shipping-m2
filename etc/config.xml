@@ -47,7 +47,7 @@
                     <method_title>Standard</method_title>
                 </checkout>
                 <checkout_parcelshop>
-                    <parcelshop_method_title>Parcelshop</parcelshop_method_title>
+                    <parcelshop_method_title>PaketShop/PaketStation</parcelshop_method_title>
                 </checkout_parcelshop>
                 <shipment_defaults>
                     <label_size>A6</label_size>

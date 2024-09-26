@@ -12,12 +12,10 @@ define(
     ],
     function ($, utils, validationRules, $t) {
         'use strict';
-        console.log('validator XX')
         return {
             validationErrors: [],
 
             validate: function (address) {
-                console.log('XXvalidateXX')
                 var self = this;
 
                 this.validationErrors = [];
