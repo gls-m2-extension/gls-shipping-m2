@@ -1,6 +1,5 @@
 /**
- * Copyright © 2017 Ahmed Kooli. All rights reserved.
- * See COPYING.txt for license details.
+ * See LICENSE.md for license details.
  */
 define(['jquery', 'ko', 'mage/translate', 'uiComponent', 'Magento_Checkout/js/model/quote', 'GlsGroup_Shipping/js/model/relay-point-collection', 'GlsGroup_Shipping/js/model/current-relay-point', 'GlsGroup_Shipping/js/action/search-relay-points'], function ($, ko, $t, Component, quote, relayPointCollection, currentRelayPoint, searchRelayPoints) {
 

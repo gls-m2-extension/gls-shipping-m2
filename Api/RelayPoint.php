@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright © 2016 KOOLI. All rights reserved.
- * See COPYING.txt for license details.
+ * See LICENSE.md for license details.
  */
 
 namespace GlsGroup\Shipping\Api;

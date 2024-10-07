@@ -1,6 +1,5 @@
 /**
- * Copyright © 2017 Ahmed Kooli. All rights reserved.
- * See COPYING.txt for license details.
+ * See LICENSE.md for license details.
  */
 var config = {
     config: {
