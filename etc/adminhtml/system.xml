@@ -8,7 +8,7 @@
     <system>
         <section id="carriers">
             <group id="glsgroup" translate="label comment" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>GLS Shipping</label>
+            <label>GLS Germany</label>
                 <field id="infoBox" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Netresearch\ConfigFields\Block\InfoBox</frontend_model>
                     <attribute type="body_template">GlsGroup_Shipping::system/config/infoBoxBody.phtml</attribute>
@@ -20,6 +20,7 @@
                 <include path="GlsGroup_Shipping::system/100_general_settings.xml"/>
                 <include path="GlsGroup_Shipping::system/200_account_settings.xml"/>
                 <include path="GlsGroup_Shipping::system/400_checkout_settings.xml"/>
+                <include path="GlsGroup_Shipping::system/450_checkout_settings_parcelshop.xml"/>
                 <include path="GlsGroup_Shipping::system/500_shipment_defaults.xml"/>
                 <include path="GlsGroup_Shipping::system/600_additional_services.xml"/>
             </group>

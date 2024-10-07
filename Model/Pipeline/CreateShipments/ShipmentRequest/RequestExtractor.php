@@ -319,7 +319,7 @@ class RequestExtractor implements RequestExtractorInterface
      */
     public function isRecipientEmailRequired(): bool
     {
-        if ($this->isFlexDeliveryEnabled()) {
+        if ($this->isFlexDeliveryEnabled() || $this->shipmentRequest->getShippingMethod() === 'parcelshop') {
             // flex delivery service requires email address
             return true;
         }

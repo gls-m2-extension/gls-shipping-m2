@@ -5,6 +5,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="save-in-quote"
+                type="GlsGroup\Shipping\Plugin\ShippingInformationManagementPlugin" sortOrder="9999"/>
+    </type>
+    <preference for="GlsGroup\Shipping\Api\RelayPointRepositoryInterface" type="GlsGroup\Shipping\Model\RelayPointRepository" />
     <!-- # sdk preferences -->
     <preference for="GlsGroup\Sdk\ParcelProcessing\Api\ReturnShipmentRequestBuilderInterface" type="GlsGroup\Sdk\ParcelProcessing\RequestBuilder\ReturnShipmentRequestBuilder"/>
     <preference for="GlsGroup\Sdk\ParcelProcessing\Api\ShipmentRequestBuilderInterface" type="GlsGroup\Sdk\ParcelProcessing\RequestBuilder\ShipmentRequestBuilder"/>

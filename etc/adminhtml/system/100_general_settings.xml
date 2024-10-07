@@ -15,6 +15,12 @@
             <config_path>carriers/glsgroup/active</config_path>
         </field>
 
+        <field id="allowed_methods" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+            <label>Allowed Methods</label>
+            <source_model>GlsGroup\Shipping\Model\Source\Method</source_model>
+            <can_be_empty>0</can_be_empty>
+        </field>
+
         <!-- Allowed Countries -->
         <field id="sallowspecific" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20"
                translate="label" type="Netresearch\ConfigFields\Model\Type\Radioset">

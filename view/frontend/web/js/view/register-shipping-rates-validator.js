@@ -19,7 +19,6 @@ define(
         shippingRatesValidationRules
     ) {
         'use strict';
-
         defaultShippingRatesValidator.registerValidator('glsgroup', shippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('glsgroup', shippingRatesValidationRules);
 

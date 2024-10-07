@@ -6,7 +6,7 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="checkout" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
-        <label>Checkout Presentation</label>
+        <label>Checkout Presentation - Standard</label>
 
         <field id="method_title" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10"
                translate="label comment" type="text" canRestore="1">

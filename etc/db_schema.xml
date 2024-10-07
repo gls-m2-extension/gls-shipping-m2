@@ -1,0 +1,9 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="quote_address">
+    <column xsi:type="text" name="gls_relay_point_id" nullable="true" comment="GLS relay id"/>
+  </table>
+  <table name="sales_order_address">
+    <column xsi:type="text" name="gls_relay_point_id" nullable="true" comment="GLS relay id"/>
+  </table>
+</schema>

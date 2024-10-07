@@ -1,0 +1,70 @@
+<div id="popup-select-relaypoint">
+    <div class="point_relais_form_inputwrapper">
+        <form data-bind="submit: search">
+            <b><label class="point_relais_form_label" data-bind="i18n: 'Search for nearby pick-up locations:'"></label></b>
+            <input type="search" class="point_relais_form_search"
+                   data-bind="textInput: searchAddress,attr:{placeholder: searchAddressPlaceholder}"/>
+        </form>
+    </div>
+    <!-- ko if: !isLoading() && relayPoints().length==0 -->
+    <div data-bind="i18n: 'We didn\'t find any pick-up location near your shipping address.'"></div>
+    <!-- /ko -->
+    <!-- ko ifnot: !isLoading() && relayPoints().length==0 -->
+    <div class="relay_points_wrapper" data-bind="blockLoader: isLoading(),css:{isLoading:isLoading()}">
+
+        <div class="point_relais_liste">
+            <ul data-bind="foreach: relayPoints">
+                <li class="point_relais_item" data-bind=" css: { actif: $parent.currentRelayPoint() && id == $parent.currentRelayPoint().id} , attr: { id: id}">
+                    <!--                    <div class="counter" data-bind="text: $index()+1"></div>-->
+                    <div class="point_relais_element">
+                        <div>
+
+                            <div class="point_relais_element_head">
+                                <div class="point_relais_title">
+                                    <!-- ko if: type=='SHOPINSHOP' -->
+                                    <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_shop.png') }" />
+                                    <!-- /ko -->
+
+                                    <!-- ko if: type=='LOCKER' -->
+                                    <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_locker.png') }" />
+                                    <!-- /ko -->
+
+                                    <div class="point_relais_element_name"><b data-bind="text: name"></b></div>
+                                </div>
+
+                                <div class="point_relais_element_distance" data-bind="text: distance"></div>
+                            </div>
+                            <span data-bind="text: address"></span>
+
+                            <div class="extra-data">
+                                <span data-bind="text: zipcode"></span>
+                                <span data-bind="text: city"></span>
+                            </div>
+                        </div>
+                        <div class="relay_point_details">
+                            <div class="tab-content">
+                                <div class="schedule">
+                                    <div class="opening_hours">
+                                        <ul data-bind="foreach: schedule">
+                                        <li class="day">
+                                            <span class="day_name" data-bind="text: title"></span> :
+                                            <span class="hours" data-bind="text: hours"></span>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="additionalInfo" data-bind="text: additionalInfo"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="select-pickup-location-btn"
+                            data-bind="click: $parent.setCurrentRelayPoint.bind($parent)">
+                        <span data-bind="i18n: 'Collect your parcels here'"></span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- /ko -->
+</div>

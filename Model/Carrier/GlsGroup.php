@@ -87,29 +87,30 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
     private $shippingRouteValidator;
 
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        RateErrorFactory $rateErrorFactory,
-        LoggerInterface $logger,
-        Security $xmlSecurity,
-        ElementFactory $xmlElFactory,
-        RateResultFactory $rateFactory,
-        MethodFactory $rateMethodFactory,
-        TrackResultFactory $trackFactory,
-        TrackErrorFactory $trackErrorFactory,
-        StatusFactory $trackStatusFactory,
-        RegionFactory $regionFactory,
-        CountryFactory $countryFactory,
-        CurrencyFactory $currencyFactory,
-        Data $directoryData,
-        StockRegistryInterface $stockRegistry,
-        ModuleConfig $moduleConfig,
-        RatesManagement $ratesManagement,
-        ShipmentManagement $shipmentManagement,
+        ScopeConfigInterface         $scopeConfig,
+        RateErrorFactory             $rateErrorFactory,
+        LoggerInterface              $logger,
+        Security                     $xmlSecurity,
+        ElementFactory               $xmlElFactory,
+        RateResultFactory            $rateFactory,
+        MethodFactory                $rateMethodFactory,
+        TrackResultFactory           $trackFactory,
+        TrackErrorFactory            $trackErrorFactory,
+        StatusFactory                $trackStatusFactory,
+        RegionFactory                $regionFactory,
+        CountryFactory               $countryFactory,
+        CurrencyFactory              $currencyFactory,
+        Data                         $directoryData,
+        StockRegistryInterface       $stockRegistry,
+        ModuleConfig                 $moduleConfig,
+        RatesManagement              $ratesManagement,
+        ShipmentManagement           $shipmentManagement,
         TrackRequestInterfaceFactory $trackRequestFactory,
-        ProxyCarrierFactory $proxyCarrierFactory,
-        ShippingRouteValidator $shippingRouteValidator,
-        array $data = []
-    ) {
+        ProxyCarrierFactory          $proxyCarrierFactory,
+        ShippingRouteValidator       $shippingRouteValidator,
+        array                        $data = []
+    )
+    {
         $this->moduleConfig = $moduleConfig;
         $this->ratesManagement = $ratesManagement;
         $this->shipmentManagement = $shipmentManagement;
@@ -163,8 +164,10 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
      */
     public function processAdditionalValidation(DataObject $request)
     {
-        $origin = (string) $request->getData('country_id');
-        $destination = (string) $request->getData('dest_country_id');
+
+        $origin = (string)$request->getData('country_id');
+
+        $destination = (string)$request->getData('dest_country_id');
         if (!$this->shippingRouteValidator->isValid($origin, $destination)) {
             return false;
         }
@@ -179,18 +182,68 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
         if ($this->_activeFlag && !$this->getConfigFlag($this->_activeFlag)) {
             return $result;
         }
-        // set carrier details for rate post-processing
+
+        $allowedMethods = explode(',', $this->getConfigData('general/allowed_methods'));
+
+        if(empty($allowedMethods)) {
+            return $result;
+        }
+
         $request->setData('carrier_code', $this->getCarrierCode());
         $request->setData('carrier_title', $this->getConfigData('title'));
+        if(in_array('standard', $allowedMethods)) {
+            $standardRate = $this->ratesManagement->collectRates($request);
+            if ($standardRate) {
+                $result->append($standardRate);
+            }
+        }
 
-        $proxyResult = $this->ratesManagement->collectRates($request);
-        if (!$proxyResult) {
+        if(in_array('parcelshop', $allowedMethods)) {
+            $parcelShopRate = $this->getParcelShopRate($request);
+            if ($parcelShopRate) {
+                $result->append($parcelShopRate);
+            }
+        }
+
+        if (!$standardRate && !$parcelShopRate) {
             $result->append($this->getErrorMessage());
 
             return $result;
         }
 
-        return $proxyResult;
+        return $result;
+    }
+
+    private function getParcelShopRate($request)
+    {
+
+        $rate = $this->_rateMethodFactory->create();
+        $rate->setCarrier($this->_code);
+
+        $rate->setCarrierTitle($this->getConfigData('parcelshop_title'));
+        $rate->setMethod('parcelshop');
+        $rate->setMethodTitle($this->getConfigData('checkout_parcelshop/parcelshop_method_title'));
+        $rate->setPrice($this->getParcelShopPrice($request));
+        return $rate;
+    }
+
+    private function getParcelShopPrice($request)
+    {
+        $tableRate = json_decode($this->getConfigData('parcelshop_price'), true);
+
+        if (is_array($tableRate)) {
+            foreach ($tableRate as $condition) {
+                if (
+                    ($condition['subtotal'] === '*' || $request->getPackageValue() >= (float) $condition['subtotal'])
+                    && ($condition['dest_country'] === '*' || $request->getDestCountryId() === $condition['dest_country'])
+                    && ($condition['dest_region'] === '*' || $request->getDestRegionCode() === $condition['dest_region'] )
+                    && ($condition['dest_zip'] === '*' || $request->getDestPostalcode() === $condition['dest_zip'] )
+                    && ($condition['weight'] === '*' || $request->getPackageWeight() >= (float) $condition['weight'])
+                ) {
+                    return (float) $condition['price'];
+                }
+            }
+        }
     }
 
     /**

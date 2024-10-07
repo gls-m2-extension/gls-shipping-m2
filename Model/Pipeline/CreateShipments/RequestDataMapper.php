@@ -56,12 +56,13 @@ class RequestDataMapper
 
     public function __construct(
         ShipmentRequestBuilderInterface $requestBuilder,
-        RequestExtractorFactory $requestExtractorFactory,
-        ModuleConfig $moduleConfig,
+        RequestExtractorFactory         $requestExtractorFactory,
+        ModuleConfig                    $moduleConfig,
         ShipmentDateCalculatorInterface $shipmentDateCalculator,
-        TimezoneInterface $timezone,
-        UnitConverterInterface $unitConverter
-    ) {
+        TimezoneInterface               $timezone,
+        UnitConverterInterface          $unitConverter
+    )
+    {
         $this->requestBuilder = $requestBuilder;
         $this->requestExtractorFactory = $requestExtractorFactory;
         $this->moduleConfig = $moduleConfig;
@@ -113,20 +114,25 @@ class RequestDataMapper
         } else {
             $recipientEmail = null;
         }
-
+        $isParcelShop = $request->getShippingMethod() === 'parcelshop';
         $this->requestBuilder->setRecipientAddress(
             $requestExtractor->getRecipient()->getCountryCode(),
             $requestExtractor->getRecipient()->getPostalCode(),
             $requestExtractor->getRecipient()->getCity(),
             $implode($requestExtractor->getRecipient()->getStreet()),
             $requestExtractor->getRecipient()->getContactPersonName(),
-            $requestExtractor->getRecipient()->getContactCompanyName(),
+            substr($requestExtractor->getRecipient()->getContactCompanyName(),0,40),
             $recipientEmail,
-            null,
-            null,
-            null,
+            $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,
+            $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,
+            $isParcelShop ? $requestExtractor->getRecipient()->getContactPersonName() : null,
             $requestExtractor->getRecipient()->getState()
         );
+
+        if ($request->getShippingMethod() === 'parcelshop') {
+            $parcelShopId = $request->getOrderShipment()->getShippingAddress()->getGlsRelayPointId();
+            $this->requestBuilder->setParcelShopId($parcelShopId);
+        }
 
         if ($requestExtractor->isFlexDeliveryEnabled()) {
             $this->requestBuilder->requestFlexDeliveryService();
@@ -150,7 +156,7 @@ class RequestDataMapper
             $codAmount = null;
             $reasonForPayment = null;
             if ($requestExtractor->isCashOnDelivery()) {
-                $codAmount = round((float) $requestExtractor->getOrder()->getBaseGrandTotal(), 2);
+                $codAmount = round((float)$requestExtractor->getOrder()->getBaseGrandTotal(), 2);
                 $reasonForPayment = $requestExtractor->getCodReasonForPayment();
             }
 
@@ -164,7 +170,7 @@ class RequestDataMapper
 
             $packageAdditional = $package->getPackageAdditional();
             if ($packageAdditional instanceof PackageAdditional && !empty($packageAdditional->getTermsOfTrade())) {
-                $this->requestBuilder->setCustomsDetails((int) $packageAdditional->getTermsOfTrade());
+                $this->requestBuilder->setCustomsDetails((int)$packageAdditional->getTermsOfTrade());
             }
         }
 

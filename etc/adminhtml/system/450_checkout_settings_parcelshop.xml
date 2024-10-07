@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * See LICENSE.md for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="checkout_parcelshop" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Checkout Presentation - Parcelshop/ParcelStation</label>
+
+        <field id="parcelshop_method_title" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10"
+               translate="label comment" type="text" canRestore="1">
+            <label>Shipping Method Title 1</label>
+            <comment>Define the method title of the delivery method in checkout.</comment>
+        </field>
+
+        <field id="parcelshop_title" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20"
+               translate="label comment" type="text" canRestore="1">
+            <label>Shipping Method Title 2</label>
+            <config_path>carriers/glsgroup/parcelshop_title</config_path>
+            <comment>Define the carrier title of the delivery method. This will be displayed next to the method title in checkout.</comment>
+        </field>
+
+        <field id="parcelshop_export" translate="label" type="GlsGroup\Shipping\Block\Adminhtml\System\Config\Form\Field\Export" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+            <config_path>carriers/glsgroup/parcelshop_price</config_path>
+            <label>Export price table rate</label>
+        </field>
+        <field id="parcelshop_price_table_rate" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Import price table rate</label>
+            <backend_model>GlsGroup\Shipping\Model\Config\Backend\Tablerate</backend_model>
+        </field>
+
+
+    </group>
+</include>
