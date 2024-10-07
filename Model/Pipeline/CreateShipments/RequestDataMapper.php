@@ -121,7 +121,7 @@ class RequestDataMapper
             $requestExtractor->getRecipient()->getCity(),
             $implode($requestExtractor->getRecipient()->getStreet()),
             $requestExtractor->getRecipient()->getContactPersonName(),
-            $requestExtractor->getRecipient()->getContactCompanyName(),
+            substr($requestExtractor->getRecipient()->getContactCompanyName(),0,40),
             $recipientEmail,
             $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,
             $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,

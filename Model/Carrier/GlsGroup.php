@@ -199,7 +199,7 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
         }
 
         if(in_array('parcelshop', $allowedMethods)) {
-            $parcelShopRate = $this->getParcelShopRate();
+            $parcelShopRate = $this->getParcelShopRate($request);
             if ($parcelShopRate) {
                 $result->append($parcelShopRate);
             }
@@ -214,7 +214,7 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
         return $result;
     }
 
-    private function getParcelShopRate()
+    private function getParcelShopRate($request)
     {
 
         $rate = $this->_rateMethodFactory->create();
@@ -223,8 +223,27 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
         $rate->setCarrierTitle($this->getConfigData('parcelshop_title'));
         $rate->setMethod('parcelshop');
         $rate->setMethodTitle($this->getConfigData('checkout_parcelshop/parcelshop_method_title'));
-        $rate->setPrice("3.90");
+        $rate->setPrice($this->getParcelShopPrice($request));
         return $rate;
+    }
+
+    private function getParcelShopPrice($request)
+    {
+        $tableRate = json_decode($this->getConfigData('parcelshop_price'), true);
+
+        if (is_array($tableRate)) {
+            foreach ($tableRate as $condition) {
+                if (
+                    ($condition['subtotal'] === '*' || $request->getPackageValue() >= (float) $condition['subtotal'])
+                    && ($condition['dest_country'] === '*' || $request->getDestCountryId() === $condition['dest_country'])
+                    && ($condition['dest_region'] === '*' || $request->getDestRegionCode() === $condition['dest_region'] )
+                    && ($condition['dest_zip'] === '*' || $request->getDestPostalcode() === $condition['dest_zip'] )
+                    && ($condition['weight'] === '*' || $request->getPackageWeight() >= (float) $condition['weight'])
+                ) {
+                    return (float) $condition['price'];
+                }
+            }
+        }
     }
 
     /**

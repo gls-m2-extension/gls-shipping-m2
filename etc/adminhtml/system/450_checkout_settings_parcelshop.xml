@@ -21,6 +21,15 @@
             <comment>Define the carrier title of the delivery method. This will be displayed next to the method title in checkout.</comment>
         </field>
 
+        <field id="parcelshop_export" translate="label" type="GlsGroup\Shipping\Block\Adminhtml\System\Config\Form\Field\Export" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+            <config_path>carriers/glsgroup/parcelshop_price</config_path>
+            <label>Export price table rate</label>
+        </field>
+        <field id="parcelshop_price_table_rate" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Import price table rate</label>
+            <backend_model>GlsGroup\Shipping\Model\Config\Backend\Tablerate</backend_model>
+        </field>
+
 
     </group>
 </include>
