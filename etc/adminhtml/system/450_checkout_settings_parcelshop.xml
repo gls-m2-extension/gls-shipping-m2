@@ -25,7 +25,7 @@
             <config_path>carriers/glsgroup/parcelshop_price</config_path>
             <label>Export price table rate</label>
         </field>
-        <field id="parcelshop_price_table_rate" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+        <field id="parcelshop_price" translate="label" type="Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
             <label>Import price table rate</label>
             <backend_model>GlsGroup\Shipping\Model\Config\Backend\Tablerate</backend_model>
         </field>

@@ -56,7 +56,7 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
-        $path = 'carriers/glsgroup/parcelshop_price';
+        $path = 'carriers/glsgroup/checkout_parcelshop/parcelshop_price';
 
         $value = $this->_scopeConfig->getValue(
             $path,
