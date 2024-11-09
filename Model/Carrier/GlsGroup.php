@@ -229,7 +229,7 @@ class GlsGroup extends AbstractCarrierOnline implements CarrierInterface
 
     private function getParcelShopPrice($request)
     {
-        $tableRate = json_decode($this->getConfigData('parcelshop_price'), true);
+        $tableRate = json_decode($this->getConfigData('checkout_parcelshop/parcelshop_price'), true);
 
         if (is_array($tableRate)) {
             foreach ($tableRate as $condition) {

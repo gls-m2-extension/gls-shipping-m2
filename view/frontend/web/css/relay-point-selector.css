@@ -56,6 +56,17 @@
 
 }
 
+.selected-relay-point ul {
+    list-style-type: none;
+    font-size: 12px;
+    padding-left: 0;
+}
+
+.selected-relay-point{
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
 #popup-select-relaypoint .point_relais_liste .point_relais_item {
     display: flex;
     flex-direction: column; /* Makes each box stack vertically */
@@ -100,40 +111,31 @@
     width: 30px;
 }
 
-#popup-select-relaypoint .point_relais_liste ul li.actif .counter,
-#popup-select-relaypoint .point_relais_liste ul li:hover .counter {
+.point_relais_liste ul li.actif .counter,
+.point_relais_liste ul li:hover .counter {
     background: #dc0032 none repeat scroll 0 0;
 }
 
-#popup-select-relaypoint .point_relais_liste ul li .point_relais_element {
+.point_relais_liste ul li .point_relais_element {
     width: 100%;
 }
 
-#popup-select-relaypoint .relay_point_details {
-    /*width: 53%;*/
-    /*float: left;*/
-    /*padding-left: 5px;*/
-    /*background-color: #f1f1f1;*/
-    /*min-height: 354px;*/
-    /*padding-top: 5px*/
-}
-
-#popup-select-relaypoint .relay_point_details .location {
+.relay_point_details .location {
     min-height: 140px;
     font-size: 14px;
 }
 
-#popup-select-relaypoint .relay_point_details .schedule{
+.relay_point_details .schedule{
     border-top: lightgrey 1px solid;
     padding-top: 7px;
     margin-top: 7px;
 }
 
-#popup-select-relaypoint .relay_point_details .schedule .opening_hours {
+.relay_point_details .schedule .opening_hours {
     font-size: 11px;
 }
 
-#popup-select-relaypoint .relay_point_details .schedule .day_name {
+.relay_point_details .schedule .day_name {
     display: inline-block;
     min-width: 55px;
 }
@@ -173,6 +175,16 @@
     margin-top: 10px;
     margin-bottom: 10px;
     color: grey;
+}
+
+.point_relais_element_distance{
+    white-space: nowrap;
+    overflow: visible;
+    font-size: 12px;
+    color: grey;
+}
+.point_relais_element_address{
+    margin-top: 20px;
 }
 
 @media only screen and (max-width: 639px) {

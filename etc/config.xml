@@ -21,106 +21,6 @@
                 <showmethod>1</showmethod>
                 <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
                 <sallowspecific>0</sallowspecific>
-                <parcelshop_price>
-                    [
-                    {
-                    "subtotal": "100",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "*",
-                    "price": "0"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "120.1000",
-                    "price": "37.5000"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "90.1000",
-                    "price": "37.5000"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "63.5100",
-                    "price": "27.2500"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "31.5999",
-                    "price": "18.1700"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "AT",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "0.0000",
-                    "price": "9.0800"
-                    },
-                    {
-                    "subtotal": "100",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "*",
-                    "price": "0"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "127.0000",
-                    "price": "37.8200"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "94.5100",
-                    "price": "23.1900"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "63.5100",
-                    "price": "17.9800"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "31.5100",
-                    "price": "11.6000"
-                    },
-                    {
-                    "subtotal": "*",
-                    "dest_country": "DE",
-                    "dest_region": "*",
-                    "dest_zip": "*",
-                    "weight": "0.0000",
-                    "price": "5.8000"
-                    }
-                    ]
-                </parcelshop_price>
 
                 <general>
                     <logging_group>
@@ -148,6 +48,106 @@
                 </checkout>
                 <checkout_parcelshop>
                     <parcelshop_method_title>PaketShop/PaketStation</parcelshop_method_title>
+                    <parcelshop_price>
+                        [
+                        {
+                        "subtotal": "100",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "*",
+                        "price": "0"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "120.1000",
+                        "price": "37.5000"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "90.1000",
+                        "price": "37.5000"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "63.5100",
+                        "price": "27.2500"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "31.5999",
+                        "price": "18.1700"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "AT",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "0.0000",
+                        "price": "9.0800"
+                        },
+                        {
+                        "subtotal": "100",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "*",
+                        "price": "0"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "127.0000",
+                        "price": "37.8200"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "94.5100",
+                        "price": "23.1900"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "63.5100",
+                        "price": "17.9800"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "31.5100",
+                        "price": "11.6000"
+                        },
+                        {
+                        "subtotal": "*",
+                        "dest_country": "DE",
+                        "dest_region": "*",
+                        "dest_zip": "*",
+                        "weight": "0.0000",
+                        "price": "5.8000"
+                        }
+                        ]
+                    </parcelshop_price>
                 </checkout_parcelshop>
                 <shipment_defaults>
                     <label_size>A6</label_size>

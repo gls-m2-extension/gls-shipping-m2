@@ -18,8 +18,8 @@
     <span data-bind="i18n: 'Pick-up location'"></span>
 </div>
 
-<div class="shipping-address-item selected-item">
-    <div>
+<div class="shipping-address-item selected-item selected-relay-point">
+    <div class="point_relais_element_head">
         <div class="point_relais_title">
             <!-- ko if: relayPoint().type=='SHOPINSHOP' -->
             <img class="point_relais_logo" width="24" height="24" data-bind="attr: { src: require.toUrl('GlsGroup_Shipping/images/gls_shop.png') }" />
@@ -31,14 +31,29 @@
 
             <div class="point_relais_element_name" data-bind="text: relayPoint().name"></div>
         </div>
-
+        <div class="point_relais_element_distance" data-bind="text: relayPoint().distance"></div>
     </div>
-    <div>
+    <div class="point_relais_element_address">
         <span data-bind="text: relayPoint().address"></span>
     </div>
 
     <div>
         <span data-bind="text: relayPoint().zipcode"></span> <span data-bind="text: relayPoint().city"></span>
+    </div>
+    <div class="relay_point_details">
+        <div class="tab-content">
+            <div class="schedule">
+                <div class="opening_hours">
+                    <ul data-bind="foreach: relayPoint().schedule">
+                        <li class="day">
+                            <span class="day_name" data-bind="text: title"></span> :
+                            <span class="hours" data-bind="text: hours"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="additionalInfo" data-bind="text: relayPoint().additionalInfo"></div>
+        </div>
     </div>
 </div>
 <div>
