@@ -78,6 +78,9 @@ class RelayPointRepository implements RelayPointRepositoryInterface
         $relayPointList = [];
 
         foreach ($response['data'] as $relayPoint) {
+            if($relayPoint['address']['countryCode'] !== $countryId) {
+                continue;
+            }
             $relayPointList[] = [
                 'id' => $relayPoint['parcelShopId'],
                 'name' => $relayPoint['name'],

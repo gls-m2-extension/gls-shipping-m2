@@ -115,13 +115,14 @@ class RequestDataMapper
             $recipientEmail = null;
         }
         $isParcelShop = $request->getShippingMethod() === 'parcelshop';
+        $billingAddress = $request->getOrderShipment()->getBillingAddress();
         $this->requestBuilder->setRecipientAddress(
             $requestExtractor->getRecipient()->getCountryCode(),
-            $requestExtractor->getRecipient()->getPostalCode(),
-            $requestExtractor->getRecipient()->getCity(),
-            $implode($requestExtractor->getRecipient()->getStreet()),
+            $isParcelShop ? $billingAddress->getPostcode() : $requestExtractor->getRecipient()->getPostalCode(),
+            $isParcelShop ? $billingAddress->getCity() : $requestExtractor->getRecipient()->getCity(),
+            $isParcelShop ? $implode($billingAddress->getStreet()) : $implode($requestExtractor->getRecipient()->getStreet()),
             $requestExtractor->getRecipient()->getContactPersonName(),
-            substr($requestExtractor->getRecipient()->getContactCompanyName(),0,40),
+            substr($requestExtractor->getRecipient()->getContactCompanyName(), 0, 40),
             $recipientEmail,
             $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,
             $isParcelShop ? $requestExtractor->getRecipient()->getContactPhoneNumber() : null,

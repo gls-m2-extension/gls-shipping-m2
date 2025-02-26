@@ -30,7 +30,6 @@ class OverwriteShippingAddressObserver implements ObserverInterface
 
             $orderAddress->setCity($this->session->getGlsRelayPoint()->getCity());
             $orderAddress->setPostcode($this->session->getGlsRelayPoint()->getZipcode());
-            $orderAddress->setCity($this->session->getGlsRelayPoint()->getCity());
             $orderAddress->setCompany($this->session->getGlsRelayPoint()->getName());
             $orderAddress->setStreet([$this->session->getGlsRelayPoint()->getAddress(), "Abholort-ID: {$this->session->getGlsRelayPoint()->getId()}"]);
         }
