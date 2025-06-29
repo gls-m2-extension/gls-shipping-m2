@@ -1,6 +1,6 @@
 {
     "name": "gls/shipping-m2",
-    "version": "1.4.4",
+    "version": "1.5.1",
     "type": "magento2-module",
     "description": "GLS carrier integration",
     "license": "OSL-3.0",
