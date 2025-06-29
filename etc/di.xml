@@ -96,7 +96,21 @@
             <argument name="version" xsi:type="object">GlsGroup\Shipping\Model\Config\ModuleConfig</argument>
         </arguments>
     </virtualType>
-
+    <virtualType name="GlsGroup\Shipping\Model\Logger\Handler\Virtual" type="Netresearch\ShippingCore\Model\Util\ApiLogHandler">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/gls_shipping.log</argument>
+            <argument name="logEnabledConfigPath" xsi:type="const">GlsGroup\Shipping\Model\Config\ModuleConfig::CONFIG_PATH_ENABLE_LOGGING</argument>
+            <argument name="logLevelConfigPath" xsi:type="const">GlsGroup\Shipping\Model\Config\ModuleConfig::CONFIG_PATH_LOGLEVEL</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GlsGroup\Shipping\Model\Logger\Virtual" type="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="const">GlsGroup\Shipping\Model\Carrier\GlsGroup::CARRIER_CODE</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="apilog" xsi:type="object">GlsGroup\Shipping\Model\Logger\Handler\Virtual</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Netresearch\ShippingCore\Model\ShippingSettings\Checkout\ShippingDataProcessor\Virtual">
         <arguments>
             <argument name="shippingOptionsProcessors" xsi:type="array">
@@ -202,6 +216,11 @@
                     <item name="3" xsi:type="const">Netresearch\ShippingCore\Model\ShippingSettings\ShippingOption\Codes::SERVICE_OPTION_CASH_ON_DELIVERY</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="GlsGroup\Shipping\Model\Webservice\ParcelProcessingServiceFactory">
+        <arguments>
+            <argument name="logger" xsi:type="object">GlsGroup\Shipping\Model\Logger\Virtual</argument>
         </arguments>
     </type>
     <type name="Netresearch\ShippingCore\Model\Util\ApiLogAnonymizer">
