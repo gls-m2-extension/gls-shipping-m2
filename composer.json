@@ -17,7 +17,6 @@
         "php": "^7.2.0 || ^8.1.0",
         "ext-intl": "*",
         "ext-json": "*",
-        "gls-m2-extension/sdk-api-parcel-processing": "^1.1.0",
         "magento/framework": "^103.0.7",
         "magento/module-bundle": "^101.0.7",
         "magento/module-catalog": "^104.0.0",
@@ -31,6 +30,7 @@
         "magento/module-shipping": "^100.3.0",
         "magento/module-store": "^101.0.0",
         "netresearch/config-fields-m2": "^1.3.0",
+        "gls-m2-extension/sdk-api-parcel-processing": "^1.1",
         "gls-m2-extension/module-shipping-core": "^3.2",
         "gls-m2-extension/module-shipping-ui": "^2.6"
     },
