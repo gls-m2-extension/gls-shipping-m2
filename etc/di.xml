@@ -10,10 +10,7 @@
                 type="GlsGroup\Shipping\Plugin\ShippingInformationManagementPlugin" sortOrder="9999"/>
     </type>
     <preference for="GlsGroup\Shipping\Api\RelayPointRepositoryInterface" type="GlsGroup\Shipping\Model\RelayPointRepository" />
-    <!-- # sdk preferences -->
-    <preference for="GlsGroup\Sdk\ParcelProcessing\Api\ReturnShipmentRequestBuilderInterface" type="GlsGroup\Sdk\ParcelProcessing\RequestBuilder\ReturnShipmentRequestBuilder"/>
-    <preference for="GlsGroup\Sdk\ParcelProcessing\Api\ShipmentRequestBuilderInterface" type="GlsGroup\Sdk\ParcelProcessing\RequestBuilder\ShipmentRequestBuilder"/>
-    <preference for="GlsGroup\Sdk\ParcelProcessing\Api\ServiceFactoryInterface" type="GlsGroup\Sdk\ParcelProcessing\Service\ServiceFactory"/>
+
 
     <!-- # virtual types -->
     <virtualType name="GlsGroup\Shipping\Model\BulkShipment\BulkShipmentManagement\Virtual" type="GlsGroup\Shipping\Model\BulkShipment\ShipmentManagement">

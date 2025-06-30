@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace GlsGroup\Shipping\Model\Webservice;
 
 use GlsGroup\Sdk\ParcelProcessing\Api\CancellationServiceInterface;
-use GlsGroup\Sdk\ParcelProcessing\Api\ServiceFactoryInterface;
+use GlsGroup\Sdk\ParcelProcessing\Service\ServiceFactory;
 use GlsGroup\Sdk\ParcelProcessing\Api\ShipmentServiceInterface;
 use GlsGroup\Sdk\ParcelProcessing\Exception\ServiceException;
 use GlsGroup\Shipping\Model\Config\ModuleConfig;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 class ParcelProcessingServiceFactory
 {
     /**
-     * @var ServiceFactoryInterface
+     * @var ServiceFactory
      */
     private $serviceFactory;
 
@@ -33,7 +33,7 @@ class ParcelProcessingServiceFactory
     private $logger;
 
     public function __construct(
-        ServiceFactoryInterface $serviceFactory,
+        ServiceFactory $serviceFactory,
         ModuleConfig $moduleConfig,
         LoggerInterface $logger
     ) {

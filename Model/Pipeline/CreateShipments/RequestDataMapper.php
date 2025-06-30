@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace GlsGroup\Shipping\Model\Pipeline\CreateShipments;
 
 use GlsGroup\Sdk\ParcelProcessing\Api\LabelRequestBuilderInterface;
-use GlsGroup\Sdk\ParcelProcessing\Api\ShipmentRequestBuilderInterface;
+use GlsGroup\Sdk\ParcelProcessing\RequestBuilder\ShipmentRequestBuilder;
 use GlsGroup\Sdk\ParcelProcessing\Exception\RequestValidatorException;
 use GlsGroup\Shipping\Model\Config\ModuleConfig;
 use GlsGroup\Shipping\Model\Config\Source\LabelSize;
@@ -30,7 +30,7 @@ class RequestDataMapper
     private $requestExtractorFactory;
 
     /**
-     * @var ShipmentRequestBuilderInterface
+     * @var ShipmentRequestBuilder
      */
     private $requestBuilder;
 
@@ -55,7 +55,7 @@ class RequestDataMapper
     private $unitConverter;
 
     public function __construct(
-        ShipmentRequestBuilderInterface $requestBuilder,
+        ShipmentRequestBuilder $requestBuilder,
         RequestExtractorFactory         $requestExtractorFactory,
         ModuleConfig                    $moduleConfig,
         ShipmentDateCalculatorInterface $shipmentDateCalculator,
