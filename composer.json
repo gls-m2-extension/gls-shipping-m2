@@ -32,7 +32,7 @@
         "netresearch/config-fields-m2": "^1.3.0",
         "gls-m2-extension/sdk-api-parcel-processing": "^1.1",
         "gls-m2-extension/module-shipping-core": "^3.3",
-        "gls-m2-extension/module-shipping-ui": "^2.6"
+        "gls-m2-extension/module-shipping-ui": "^2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5.0 || ^9.0.0",
