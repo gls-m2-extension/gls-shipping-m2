@@ -33,7 +33,7 @@ class MethodTitle implements RateResponseProcessorInterface
      *
      * @return Method[]
      */
-    public function processMethods(array $methods, RateRequest $request = null): array
+    public function processMethods(array $methods, ?RateRequest $request = null): array
     {
         $storeId = ($request instanceof RateRequest) ? $request->getData('store_id') : null;
         $methodTitle = $this->moduleConfig->getMethodTitle($storeId);

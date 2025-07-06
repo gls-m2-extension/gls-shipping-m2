@@ -58,7 +58,7 @@ class Guaranteed24ServiceProcessor implements ShippingOptionsProcessorInterface
         int $storeId,
         string $countryCode,
         string $postalCode,
-        ShipmentInterface $shipment = null
+        ?ShipmentInterface $shipment = null
     ): array {
         if ($carrierCode !== GlsGroup::CARRIER_CODE) {
             // different carrier, nothing to modify.
