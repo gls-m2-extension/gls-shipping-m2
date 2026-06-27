@@ -64,12 +64,17 @@ class RequestMapper
         $shipment = [
             'Middleware'        => 'Magento2ExtviaGLS',
             'Product'           => 'PARCEL',
-            'ShipmentReference' => [$orderId],
+            'ShipmentReference' => [substr($orderId, 0, 40)],
             'ShippingDate'      => $this->timezone->scopeDate($storeId)->format('Y-m-d'),
             'Shipper'           => $this->buildShipper($storeId),
             'Consignee'         => ['Address' => $this->buildConsigneeAddress($request, $isParcelShop)],
             'ShipmentUnit'      => $this->buildShipmentUnits($request),
         ];
+
+        $incotermCode = $this->getIncotermCode($request);
+        if ($incotermCode !== '') {
+            $shipment['IncotermCode'] = $incotermCode;
+        }
 
         $services = $this->buildServices($request, $isParcelShop);
         if (!empty($services)) {
@@ -77,6 +82,22 @@ class RequestMapper
         }
 
         return $shipment;
+    }
+
+    /**
+     * Read the merchant-selected terms of trade from the current package's customs params.
+     *
+     * The value is stored in packages[$packageId]['params']['customs']['termsOfTrade']
+     * by the Magento checkout/shipment form — the same location the old API pipeline reads.
+     * Returns an empty string when no customs data is present (domestic EU shipments).
+     */
+    private function getIncotermCode(Request $request): string
+    {
+        $packages  = (array) $request->getData('packages');
+        $packageId = $request->getData('package_id');
+        $customs   = $packages[$packageId]['params']['customs'] ?? [];
+
+        return (string) ($customs['termsOfTrade'] ?? '');
     }
 
     private function buildShipper(int $storeId): array
@@ -105,16 +126,18 @@ class RequestMapper
         $companyName = (string) $request->getRecipientContactCompanyName();
 
         $address = [
-            'Name1'       => $personName ?: $companyName,
-            'Name2'       => $personName ? $companyName : null,
+            'Name1'       => substr($personName ?: $companyName, 0, 40),
+            'Name2'       => $personName ? substr($companyName, 0, 40) : null,
             'CountryCode' => $request->getRecipientAddressCountryCode(),
             'City'        => $city,
             'Street'      => $street,
             'ZIPCode'     => $zipcode,
+            // Email is always included when available: required by FlexDelivery service,
+            // and harmless for all other shipment types.
+            'eMail'       => $request->getOrderShipment()->getShippingAddress()->getEmail(),
         ];
 
         if ($isParcelShop) {
-            $address['eMail']             = $request->getOrderShipment()->getShippingAddress()->getEmail();
             $address['MobilePhoneNumber'] = (string) $request->getRecipientContactPhoneNumber();
         }
 
