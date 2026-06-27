@@ -33,6 +33,13 @@ class ModuleConfig implements VersionInterface, ProxyCarrierConfigInterface
     private const CONFIG_PATH_CONTACT_ID = 'carriers/glsgroup/account/contact_id';
     private const CONFIG_PATH_BROKER_REFERENCE = 'carriers/glsgroup/account/broker_reference';
 
+    // 250_shipit_settings.xml
+    private const CONFIG_PATH_SHIPIT_ENABLED     = 'carriers/glsgroup/shipit/enabled';
+    private const CONFIG_PATH_SHIPIT_SANDBOX_MODE = 'carriers/glsgroup/shipit/sandbox_mode';
+    private const CONFIG_PATH_SHIPIT_CLIENT_ID   = 'carriers/glsgroup/shipit/client_id';
+    private const CONFIG_PATH_SHIPIT_CLIENT_SECRET = 'carriers/glsgroup/shipit/client_secret';
+    private const CONFIG_PATH_SHIPIT_CONTACT_ID  = 'carriers/glsgroup/shipit/contact_id';
+
     // 400_checkout_settings.xml
     private const CONFIG_PATH_PROXY_CARRIER = 'carriers/glsgroup/checkout/emulated_carrier';
     private const CONFIG_PATH_SHIPPING_METHOD_TITLE = 'carriers/glsgroup/checkout/method_title';
@@ -209,6 +216,96 @@ class ModuleConfig implements VersionInterface, ProxyCarrierConfigInterface
     public function getBrokerReference(): string
     {
         return (string) $this->scopeConfig->getValue(self::CONFIG_PATH_BROKER_REFERENCE);
+    }
+
+    /**
+     * Returns true if the ShipIt API is enabled for the given store.
+     *
+     * @param mixed $store
+     * @return bool
+     */
+    public function isShipItEnabled($store = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::CONFIG_PATH_SHIPIT_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Returns true if the ShipIt sandbox environment should be used.
+     *
+     * @param mixed $store
+     * @return bool
+     */
+    public function isShipItSandboxMode($store = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::CONFIG_PATH_SHIPIT_SANDBOX_MODE,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Get the ShipIt OAuth client ID.
+     *
+     * @param mixed $store
+     * @return string
+     */
+    public function getShipItClientId($store = null): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_SHIPIT_CLIENT_ID,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Get the ShipIt OAuth client secret.
+     *
+     * @param mixed $store
+     * @return string
+     */
+    public function getShipItClientSecret($store = null): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_SHIPIT_CLIENT_SECRET,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Get the default package weight (kg) used when the product has no weight configured.
+     *
+     * @param mixed $store
+     * @return float
+     */
+    public function getPackageDefaultWeight($store = null): float
+    {
+        return (float) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_PACKAGE_DEFAULT_WEIGHT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Get the ShipIt shipper contact ID (Shipper.ContactID in shipment requests).
+     *
+     * @param mixed $store
+     * @return string
+     */
+    public function getShipItContactId($store = null): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::CONFIG_PATH_SHIPIT_CONTACT_ID,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**

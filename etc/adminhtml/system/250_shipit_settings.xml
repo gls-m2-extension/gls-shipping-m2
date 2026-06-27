@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * See LICENSE.md for license details.
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="shipit" translate="label comment" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
+        <label>ShipIt API (New)</label>
+        <comment>Configure the ShipIt API to replace the legacy GLS WebAPI. When enabled, all label operations will use ShipIt. Disabled by default.</comment>
+
+        <field id="enabled" translate="label comment" type="select"
+               sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Enable ShipIt API</label>
+            <comment>When enabled, label creation and cancellation will use the ShipIt API instead of the legacy GLS WebAPI.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+
+        <field id="sandbox_mode" translate="label comment" type="select"
+               sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Sandbox Mode</label>
+            <comment>Use the ShipIt sandbox environment for testing. No real labels will be created.</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <depends>
+                <field id="enabled">1</field>
+            </depends>
+        </field>
+
+        <field id="client_id" translate="label comment" type="text"
+               sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Client ID</label>
+            <comment>ShipIt OAuth client identifier provided by GLS.</comment>
+            <depends>
+                <field id="enabled">1</field>
+            </depends>
+        </field>
+
+        <field id="client_secret" translate="label comment" type="obscure"
+               sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Client Secret</label>
+            <comment>ShipIt OAuth client secret provided by GLS.</comment>
+            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+            <depends>
+                <field id="enabled">1</field>
+            </depends>
+        </field>
+
+        <field id="contact_id" translate="label comment" type="text"
+               sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Contact ID</label>
+            <comment>ShipIt shipper contact identifier (used as Shipper.ContactID in every shipment request).</comment>
+            <depends>
+                <field id="enabled">1</field>
+            </depends>
+        </field>
+    </group>
+</include>

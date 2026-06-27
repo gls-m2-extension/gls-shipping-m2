@@ -8,16 +8,26 @@ declare(strict_types=1);
 
 namespace GlsGroup\Shipping\Model\BulkShipment;
 
+use GlsGroup\Shipping\Model\Config\ModuleConfig;
 use GlsGroup\Shipping\Model\Pipeline\ApiGateway;
 use GlsGroup\Shipping\Model\Pipeline\ApiGatewayFactory;
+use GlsGroup\Shipping\Model\ShipIt\ShipItService;
+use Magento\Framework\DataObject;
 use Magento\Shipping\Model\Shipment\Request;
 use Netresearch\ShippingCore\Api\BulkShipment\BulkLabelCancellationInterface;
 use Netresearch\ShippingCore\Api\BulkShipment\BulkLabelCreationInterface;
+use Netresearch\ShippingCore\Api\Data\Pipeline\ShipmentResponse\LabelResponseInterface;
+use Netresearch\ShippingCore\Api\Data\Pipeline\ShipmentResponse\ShipmentErrorResponseInterface;
 use Netresearch\ShippingCore\Api\Data\Pipeline\ShipmentResponse\ShipmentResponseInterface;
 use Netresearch\ShippingCore\Api\Data\Pipeline\TrackRequest\TrackRequestInterface;
+use Netresearch\ShippingCore\Api\Data\Pipeline\TrackResponse\TrackErrorResponseInterface;
 use Netresearch\ShippingCore\Api\Data\Pipeline\TrackResponse\TrackResponseInterface;
 use Netresearch\ShippingCore\Api\Pipeline\ShipmentResponseProcessorInterface;
 use Netresearch\ShippingCore\Api\Pipeline\TrackResponseProcessorInterface;
+use Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\ErrorResponseFactory;
+use Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\LabelResponseFactory;
+use Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackErrorResponseFactory;
+use Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackResponseFactory;
 
 /**
  * Class ShipmentManagement
@@ -46,14 +56,56 @@ class ShipmentManagement implements BulkLabelCreationInterface, BulkLabelCancell
      */
     private $apiGateways;
 
+    /**
+     * @var ShipItService
+     */
+    private $shipItService;
+
+    /**
+     * @var ModuleConfig
+     */
+    private $moduleConfig;
+
+    /**
+     * @var LabelResponseFactory
+     */
+    private $labelResponseFactory;
+
+    /**
+     * @var ErrorResponseFactory
+     */
+    private $errorResponseFactory;
+
+    /**
+     * @var TrackResponseFactory
+     */
+    private $trackResponseFactory;
+
+    /**
+     * @var TrackErrorResponseFactory
+     */
+    private $trackErrorResponseFactory;
+
     public function __construct(
         ApiGatewayFactory $apiGatewayFactory,
         ShipmentResponseProcessorInterface $createResponseProcessor,
-        TrackResponseProcessorInterface $deleteResponseProcessor
+        TrackResponseProcessorInterface $deleteResponseProcessor,
+        ShipItService $shipItService,
+        ModuleConfig $moduleConfig,
+        TrackResponseFactory $trackResponseFactory,
+        TrackErrorResponseFactory $trackErrorResponseFactory,
+        LabelResponseFactory $labelResponseFactory,
+        ErrorResponseFactory $errorResponseFactory
     ) {
-        $this->apiGatewayFactory = $apiGatewayFactory;
-        $this->createResponseProcessor = $createResponseProcessor;
-        $this->deleteResponseProcessor = $deleteResponseProcessor;
+        $this->apiGatewayFactory         = $apiGatewayFactory;
+        $this->createResponseProcessor   = $createResponseProcessor;
+        $this->deleteResponseProcessor   = $deleteResponseProcessor;
+        $this->shipItService             = $shipItService;
+        $this->moduleConfig              = $moduleConfig;
+        $this->trackResponseFactory      = $trackResponseFactory;
+        $this->trackErrorResponseFactory = $trackErrorResponseFactory;
+        $this->labelResponseFactory      = $labelResponseFactory;
+        $this->errorResponseFactory      = $errorResponseFactory;
     }
 
     /**
@@ -104,8 +156,12 @@ class ShipmentManagement implements BulkLabelCreationInterface, BulkLabelCancell
         }
 
         foreach ($apiRequests as $storeId => $storeApiRequests) {
-            $api = $this->getApiGateway($storeId);
-            $apiResults[$storeId] = $api->createShipments($storeApiRequests);
+            if ($this->moduleConfig->isShipItEnabled($storeId)) {
+                $rawResults = $this->shipItService->createShipments($storeApiRequests, $storeId);
+                $apiResults[$storeId] = $this->convertShipItCreateResults($rawResults, $storeApiRequests);
+            } else {
+                $apiResults[$storeId] = $this->getApiGateway($storeId)->createShipments($storeApiRequests);
+            }
         }
 
         if (!empty($apiResults)) {
@@ -140,8 +196,12 @@ class ShipmentManagement implements BulkLabelCreationInterface, BulkLabelCancell
         }
 
         foreach ($apiRequests as $storeId => $storeApiRequests) {
-            $api = $this->getApiGateway($storeId);
-            $apiResults[$storeId] = $api->cancelShipments($storeApiRequests);
+            if ($this->moduleConfig->isShipItEnabled($storeId)) {
+                $rawResults = $this->shipItService->cancelShipments(array_keys($storeApiRequests), $storeId);
+                $apiResults[$storeId] = $this->convertShipItCancelResults($rawResults, $storeApiRequests);
+            } else {
+                $apiResults[$storeId] = $this->getApiGateway($storeId)->cancelShipments($storeApiRequests);
+            }
         }
 
         if (!empty($apiResults)) {
@@ -150,5 +210,84 @@ class ShipmentManagement implements BulkLabelCreationInterface, BulkLabelCancell
         }
 
         return $apiResults;
+    }
+
+    /**
+     * Convert ShipIt create DataObject results into ShipmentResponseInterface objects,
+     * then run the response processor to add tracks and labels to the shipment entities.
+     *
+     * Results are returned in the same order as the input requests.
+     *
+     * @param DataObject[] $shipItResults  Plain DataObjects from ShipItService
+     * @param Request[]    $requests       Original shipment requests in the same order
+     * @return ShipmentResponseInterface[]
+     */
+    private function convertShipItCreateResults(array $shipItResults, array $requests): array
+    {
+        $labelResponses = [];
+        $errorResponses = [];
+        $requests       = array_values($requests);
+
+        foreach ($shipItResults as $index => $dataObject) {
+            $shipment = isset($requests[$index]) ? $requests[$index]->getOrderShipment() : null;
+            $error    = $dataObject->getData('errors');
+
+            if ($error !== null) {
+                $errorResponses[] = $this->errorResponseFactory->create([
+                    'data' => [
+                        ShipmentResponseInterface::REQUEST_INDEX  => (string) $index,
+                        ShipmentResponseInterface::SALES_SHIPMENT => $shipment,
+                        ShipmentErrorResponseInterface::ERRORS    => [$error],
+                    ],
+                ]);
+            } else {
+                $labelResponses[] = $this->labelResponseFactory->create([
+                    'data' => [
+                        LabelResponseInterface::REQUEST_INDEX         => (string) $index,
+                        LabelResponseInterface::SALES_SHIPMENT        => $shipment,
+                        LabelResponseInterface::TRACKING_NUMBER       => $dataObject->getData('tracking_number'),
+                        LabelResponseInterface::SHIPPING_LABEL_CONTENT => $dataObject->getData('shipping_label_content'),
+                    ],
+                ]);
+            }
+        }
+
+        $this->createResponseProcessor->processResponse($labelResponses, $errorResponses);
+
+        return array_merge($labelResponses, $errorResponses);
+    }
+
+    /**
+     * Convert ShipIt cancel DataObject results into TrackResponseInterface objects
+     * that the Netresearch cancel controller and response processors expect.
+     *
+     * @param DataObject[]            $shipItResults  Plain DataObjects from ShipItService
+     * @param TrackRequestInterface[] $cancelRequests Original requests keyed by track number
+     * @return TrackResponseInterface[]
+     */
+    private function convertShipItCancelResults(array $shipItResults, array $cancelRequests): array
+    {
+        $responses = [];
+
+        foreach ($shipItResults as $dataObject) {
+            $trackNumber    = (string) $dataObject->getData('track_number');
+            $cancelRequest  = $cancelRequests[$trackNumber] ?? null;
+
+            $data = [
+                TrackResponseInterface::TRACK_NUMBER   => $trackNumber,
+                TrackResponseInterface::SALES_SHIPMENT => $cancelRequest ? $cancelRequest->getSalesShipment() : null,
+                TrackResponseInterface::SALES_TRACK    => $cancelRequest ? $cancelRequest->getSalesTrack() : null,
+            ];
+
+            $error = $dataObject->getData('errors');
+            if ($error !== null) {
+                $data[TrackErrorResponseInterface::ERRORS] = [$error];
+                $responses[] = $this->trackErrorResponseFactory->create(['data' => $data]);
+            } else {
+                $responses[] = $this->trackResponseFactory->create(['data' => $data]);
+            }
+        }
+
+        return $responses;
     }
 }
