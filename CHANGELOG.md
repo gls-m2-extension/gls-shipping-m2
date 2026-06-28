@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.0.0
+
+### Added
+
+- ShipIT REST API integration as a parallel label creation and cancellation path.
+- OAuth2 client credentials authentication (per-store Client ID / Client Secret).
+- New admin configuration section "ShipIt API (New)" with Enable toggle, Sandbox Mode, Client ID, Client Secret, and Contact ID fields.
+- Support for all existing services via ShipIT: FlexDelivery, Guaranteed24, Deposit, Letterbox, ShopReturn, CashOnDelivery, and ParcelShop delivery.
+- ShopReturn return label automatically extracted from the second PrintData entry and combined with the outbound label PDF.
+- Incoterm code support for non-EU and intercontinental shipments.
+- Shipment date calculation with cut-off time support on the ShipIT path.
+- Weight minimum enforcement (0.1 kg) and unit conversion (lbs, g → kg) on the ShipIT path.
+
 ## 1.2.0
 
 Magento 2.4.4 compatibility release

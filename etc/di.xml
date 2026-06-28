@@ -17,6 +17,12 @@
         <arguments>
             <argument name="createResponseProcessor" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\BulkShipment\CreateLabelResponseProcessor\Virtual</argument>
             <argument name="deleteResponseProcessor" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\BulkShipment\CancelLabelResponseProcessor\Virtual</argument>
+            <argument name="shipItService" xsi:type="object">GlsGroup\Shipping\Model\ShipIt\ShipItService</argument>
+            <argument name="moduleConfig" xsi:type="object">GlsGroup\Shipping\Model\Config\ModuleConfig</argument>
+            <argument name="trackResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackResponseFactory</argument>
+            <argument name="trackErrorResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackErrorResponseFactory</argument>
+            <argument name="labelResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\LabelResponseFactory</argument>
+            <argument name="errorResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\ErrorResponseFactory</argument>
         </arguments>
     </virtualType>
     <virtualType name="GlsGroup\Shipping\Model\BulkShipment\BulkShipmentManagement\Proxy\Virtual" type="GlsGroup\Shipping\Model\BulkShipment\ShipmentManagement\Proxy">
@@ -137,6 +143,12 @@
         <arguments>
             <argument name="createResponseProcessor" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Shipment\CreateLabelResponseProcessor\Virtual</argument>
             <argument name="deleteResponseProcessor" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\BulkShipment\CancelLabelResponseProcessor\Virtual</argument>
+            <argument name="shipItService" xsi:type="object">GlsGroup\Shipping\Model\ShipIt\ShipItService</argument>
+            <argument name="moduleConfig" xsi:type="object">GlsGroup\Shipping\Model\Config\ModuleConfig</argument>
+            <argument name="trackResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackResponseFactory</argument>
+            <argument name="trackErrorResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Track\TrackResponse\TrackErrorResponseFactory</argument>
+            <argument name="labelResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\LabelResponseFactory</argument>
+            <argument name="errorResponseFactory" xsi:type="object">Netresearch\ShippingCore\Model\Pipeline\Shipment\ShipmentResponse\ErrorResponseFactory</argument>
         </arguments>
     </type>
     <type name="GlsGroup\Shipping\Model\Carrier\GlsGroup">

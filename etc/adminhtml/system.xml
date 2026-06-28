@@ -19,6 +19,7 @@
                 </field>
                 <include path="GlsGroup_Shipping::system/100_general_settings.xml"/>
                 <include path="GlsGroup_Shipping::system/200_account_settings.xml"/>
+                <include path="GlsGroup_Shipping::system/250_shipit_settings.xml"/>
                 <include path="GlsGroup_Shipping::system/400_checkout_settings.xml"/>
                 <include path="GlsGroup_Shipping::system/450_checkout_settings_parcelshop.xml"/>
                 <include path="GlsGroup_Shipping::system/500_shipment_defaults.xml"/>
