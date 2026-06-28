@@ -11,6 +11,7 @@ namespace GlsGroup\Shipping\Model\ShipIt;
 use GlsGroup\Shipping\Model\Config\ModuleConfig;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Shipping\Model\Shipment\Request;
+use Netresearch\ShippingCore\Api\ShipmentDate\ShipmentDateCalculatorInterface;
 
 /**
  * Maps a Magento shipment request to a ShipIt API ShipmentRequestData payload array.
@@ -27,12 +28,19 @@ class RequestMapper
      */
     private $timezone;
 
+    /**
+     * @var ShipmentDateCalculatorInterface
+     */
+    private $shipmentDateCalculator;
+
     public function __construct(
         ModuleConfig $moduleConfig,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        ShipmentDateCalculatorInterface $shipmentDateCalculator
     ) {
-        $this->moduleConfig = $moduleConfig;
-        $this->timezone     = $timezone;
+        $this->moduleConfig           = $moduleConfig;
+        $this->timezone               = $timezone;
+        $this->shipmentDateCalculator = $shipmentDateCalculator;
     }
 
     /**
@@ -65,7 +73,7 @@ class RequestMapper
             'Middleware'        => 'Magento2ExtviaGLS',
             'Product'           => 'PARCEL',
             'ShipmentReference' => [substr($orderId, 0, 40)],
-            'ShippingDate'      => $this->timezone->scopeDate($storeId)->format('Y-m-d'),
+            'ShippingDate'      => $this->resolveShippingDate($storeId),
             'Shipper'           => $this->buildShipper($storeId),
             'Consignee'         => ['Address' => $this->buildConsigneeAddress($request, $isParcelShop)],
             'ShipmentUnit'      => $this->buildShipmentUnits($request),
@@ -98,6 +106,29 @@ class RequestMapper
         $customs   = $packages[$packageId]['params']['customs'] ?? [];
 
         return (string) ($customs['termsOfTrade'] ?? '');
+    }
+
+    /**
+     * Calculate the next valid shipping date respecting the store's cut-off times.
+     *
+     * Delegates to ShipmentDateCalculatorInterface — the same calculator used by the
+     * old ParcelProcessing pipeline — so that labels created after the daily cut-off
+     * are automatically dated to the next business day.
+     * Falls back to today's store-local date if no cut-off times are configured or
+     * the calculator throws (e.g. no working days in the configured window).
+     */
+    private function resolveShippingDate(int $storeId): string
+    {
+        try {
+            $date = $this->shipmentDateCalculator->getDate(
+                $this->moduleConfig->getCutOffTimes($storeId),
+                $storeId
+            );
+        } catch (\RuntimeException $e) {
+            $date = $this->timezone->scopeDate($storeId);
+        }
+
+        return $date->format('Y-m-d');
     }
 
     private function buildShipper(int $storeId): array
@@ -154,6 +185,7 @@ class RequestMapper
         $storeId = (int) $request->getOrderShipment()->getStoreId();
         $orderId = $request->getOrderShipment()->getOrder()->getIncrementId();
         $units   = [];
+        $codService = $this->buildCodService($request);
 
         foreach ((array) $request->getData('packages') as $package) {
             $weight    = (float) ($package['params']['weight'] ?? 0);
@@ -162,10 +194,14 @@ class RequestMapper
             if ($weightKg < self::WEIGHT_MIN_KG) {
                 $weightKg = max($this->moduleConfig->getPackageDefaultWeight($storeId), self::WEIGHT_MIN_KG);
             }
-            $units[] = [
+            $unit = [
                 'Weight' => round($weightKg, 3),
                 'Note1'  => $orderId,
             ];
+            if ($codService !== null) {
+                $unit['Service'] = [$codService];
+            }
+            $units[] = $unit;
         }
 
         // Fallback when packages data is missing
@@ -174,13 +210,48 @@ class RequestMapper
             if ($weightKg < self::WEIGHT_MIN_KG) {
                 $weightKg = max($this->moduleConfig->getPackageDefaultWeight($storeId), self::WEIGHT_MIN_KG);
             }
-            $units[] = [
+            $unit = [
                 'Weight' => round($weightKg, 3),
                 'Note1'  => $orderId,
             ];
+            if ($codService !== null) {
+                $unit['Service'] = [$codService];
+            }
+            $units[] = $unit;
         }
 
         return $units;
+    }
+
+    /**
+     * Build the Cash-on-Delivery service entry for a ShipmentUnit, or null if CoD is not selected.
+     *
+     * ShipIt API places CoD at the ShipmentUnit.Service level (not Shipment.Service).
+     * The amount is the order's base grand total; the reason for payment comes from the
+     * package's service params — the same location the old RequestDataMapper reads it.
+     *
+     * @return array|null  ['Cash' => [...]] ready for inclusion in ShipmentUnit.Service, or null
+     */
+    private function buildCodService(Request $request): ?array
+    {
+        $selectedServices = $this->getSelectedServices($request);
+
+        if (empty($selectedServices['cashOnDelivery']['enabled'])) {
+            return null;
+        }
+
+        $reason   = (string) ($selectedServices['cashOnDelivery']['reasonForPayment'] ?? '');
+        $amount   = round((float) $request->getOrderShipment()->getOrder()->getBaseGrandTotal(), 2);
+        $currency = (string) $request->getOrderShipment()->getOrder()->getBaseCurrencyCode();
+
+        return [
+            'Cash' => [
+                'ServiceName' => 'service_cash',
+                'Reason'      => $reason,
+                'Amount'      => number_format($amount, 2, '.', ''),
+                'Currency'    => $currency,
+            ],
+        ];
     }
 
     private function buildServices(Request $request, bool $isParcelShop): array
@@ -202,15 +273,27 @@ class RequestMapper
             $services[] = ['Service' => ['ServiceName' => 'service_flexdelivery']];
         }
 
+        // Deposit and letterbox both map to the Deposit service in the ShipIt API.
+        // Deposit (consumer-selected location) takes precedence over letterbox (merchant default),
+        // matching the old RequestExtractor.getPlaceOfDeposit() behaviour.
+        $placeOfDeposit = '';
         if (!empty($selectedServices['deposit']['enabled'])) {
             $placeOfDeposit = (string) ($selectedServices['deposit']['details'] ?? '');
-            if ($placeOfDeposit !== '') {
-                $services[] = ['Deposit' => ['ServiceName' => 'service_deposit', 'PlaceOfDeposit' => $placeOfDeposit]];
-            }
+        } elseif (!empty($selectedServices['letterBox']['enabled'])) {
+            $placeOfDeposit = 'Briefkasten';
+        }
+        if ($placeOfDeposit !== '') {
+            $services[] = ['Deposit' => ['ServiceName' => 'service_deposit', 'PlaceOfDeposit' => $placeOfDeposit]];
         }
 
         if (!empty($selectedServices['guaranteed24']['enabled'])) {
             $services[] = ['Service' => ['ServiceName' => 'service_guaranteed24']];
+        }
+
+        if (!empty($selectedServices['shopReturn']['enabled'])) {
+            // ShipIt returns a second label (PrintData[1]) alongside the outbound label
+            // when this service is booked. ShipItService::buildLabelResult() extracts it.
+            $services[] = ['Service' => ['ServiceName' => 'service_shopreturn']];
         }
 
         return $services;

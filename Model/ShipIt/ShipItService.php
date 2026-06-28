@@ -158,23 +158,39 @@ class ShipItService
      * ShipIt returns one ParcelData entry per shipment unit. The carrier module
      * always creates one unit per request, so index [0] is always the right one.
      * Label bytes are base64-encoded inside PrintData[].Data[].
+     *
+     * When the ShopReturn service was requested the API returns two PrintData entries:
+     *   PrintData[0] — outbound label
+     *   PrintData[1] — return label (shop-return label for the customer to use)
+     * In that case return_label_content is populated so ShipmentManagement can attach
+     * the return document to the LabelResponse and combine the two PDFs.
      */
     private function buildLabelResult(array $response): DataObject
     {
-        $parcelData = $response['CreatedShipment']['ParcelData'][0] ?? [];
-        $printData  = $response['CreatedShipment']['PrintData'][0] ?? [];
+        $parcelData      = $response['CreatedShipment']['ParcelData'][0] ?? [];
+        $outboundData    = $response['CreatedShipment']['PrintData'][0] ?? [];
+        $returnPrintData = $response['CreatedShipment']['PrintData'][1] ?? null;
 
-        $trackId  = $parcelData['TrackID'] ?? '';
-        $rawData  = $printData['Data'] ?? '';
-        // API returns Data as a plain base64 string, not an array.
-        $labelData = is_array($rawData) ? base64_decode($rawData[0]) : base64_decode($rawData);
+        $trackId = $parcelData['TrackID'] ?? '';
 
-        return $this->dataObjectFactory->create([
-            'data' => [
-                'tracking_number'        => $trackId,
-                'shipping_label_content' => $labelData,
-            ],
-        ]);
+        $rawOutbound = $outboundData['Data'] ?? '';
+        $labelData   = is_array($rawOutbound)
+            ? base64_decode($rawOutbound[0])
+            : base64_decode($rawOutbound);
+
+        $data = [
+            'tracking_number'        => $trackId,
+            'shipping_label_content' => $labelData,
+        ];
+
+        if ($returnPrintData !== null) {
+            $rawReturn = $returnPrintData['Data'] ?? '';
+            $data['return_label_content'] = is_array($rawReturn)
+                ? base64_decode($rawReturn[0])
+                : base64_decode($rawReturn);
+        }
+
+        return $this->dataObjectFactory->create(['data' => $data]);
     }
 
     private function buildErrorResult(string $message): DataObject
