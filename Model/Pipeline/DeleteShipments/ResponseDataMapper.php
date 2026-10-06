@@ -80,7 +80,7 @@ class ResponseDataMapper
             TrackResponseInterface::TRACK_NUMBER => $trackNumber,
             TrackResponseInterface::SALES_SHIPMENT => $salesShipment,
             TrackResponseInterface::SALES_TRACK => $salesTrack,
-            TrackErrorResponseInterface::ERRORS => $message,
+            TrackErrorResponseInterface::ERRORS => [$message],
         ];
 
         return $this->errorResponseFactory->create(['data' => $responseData]);
